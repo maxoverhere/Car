@@ -1,5 +1,6 @@
 from game.ai_sight import *
-
+import settings as s
+import math
 vec = pg.math.Vector2
 
 
@@ -14,15 +15,33 @@ class Player(pg.sprite.Sprite):
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
+        self.pos = vec(x, y) * s.TILESIZE
+        self.rot = 0
         self.image = game.player_img
         self.rect = self.image.get_rect()
+        self.rect.center = self.pos
         self.hit_rect = s.PLAYER_HIT_RECT
         self.hit_rect.center = self.rect.center
         self.reward = 0
         self.vel = vec(0, 0)
-        self.pos = vec(x, y) * s.TILESIZE
-        self.rot = 0
         self.sight_postions = []
+
+    def update(self):
+        self.ticks_since_last_reward += 1
+        if s.SHOW_AI_SIGHT:
+            self.sight_postions = self.sight.get_sight_position(self.pos, self.rot)
+        self.get_keys()
+        self.collide_with_reward_line()
+        self.rot = (self.rot + self.rot_speed * self.game.dt) % 360
+        self.image = pg.transform.rotate(self.game.player_img, self.rot)
+        self.rect = self.image.get_rect()
+        self.rect.center = self.pos
+        self.pos += self.vel * self.game.dt
+        self.hit_rect.centerx = self.pos.x
+        self.collide_with_walls('x')
+        self.hit_rect.centery = self.pos.y
+        self.collide_with_walls('y')
+        self.rect.center = self.hit_rect.center
 
     def get_keys(self):
         self.rot_speed = 0
@@ -66,23 +85,6 @@ class Player(pg.sprite.Sprite):
 
     def get_sight(self):
         return self.sight.get_sight(self.pos, self.rot)
-
-    def update(self):
-        self.ticks_since_last_reward += 1
-        if s.SHOW_AI_SIGHT:
-            self.sight_postions = self.sight.get_sight_position(self.pos, self.rot)
-        self.get_keys()
-        self.collide_with_reward_line()
-        self.rot = (self.rot + self.rot_speed * self.game.dt) % 360
-        self.image = pg.transform.rotate(self.game.player_img, self.rot)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pos
-        self.pos += self.vel * self.game.dt
-        self.hit_rect.centerx = self.pos.x
-        self.collide_with_walls('x')
-        self.hit_rect.centery = self.pos.y
-        self.collide_with_walls('y')
-        self.rect.center = self.hit_rect.center
 
 
 class Wall(pg.sprite.Sprite):

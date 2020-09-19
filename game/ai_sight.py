@@ -1,9 +1,11 @@
+from pygame.math import Vector2
 from game.sprites import *
 from game.tilemap import Map
 from settings import *
-
-vec = pygame.math.Vector2
-
+from os import path
+import copy
+vec = Vector2
+import math
 
 class Sight:
 

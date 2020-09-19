@@ -1,14 +1,17 @@
 import sys
 import time
-
 from game.sprites import *
 from game.tilemap import *
+from players.ai_table import QLearning
+from os import path
 
 
 class Game:
     def __init__(self):
         pg.init()
         self.rewardLines = pg.sprite.Group()
+        self.all_sprites = pg.sprite.Group()
+        self.walls = pg.sprite.Group()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.dt = 1 / FPS
@@ -46,9 +49,6 @@ class Game:
             RewardLine(self, reward_line)
 
     def new(self):
-        self.all_sprites = pg.sprite.Group()
-        self.walls = pg.sprite.Group()
-        self.rewardLines = pg.sprite.Group()
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
@@ -57,8 +57,7 @@ class Game:
         self.camera = Camera(self.map.width, self.map.height)
 
     def run(self):
-        self.playing = True
-        while self.playing:
+        while True:
             if self.limit_frames:
                 self.dt = self.clock.tick(FPS) * 0.001
             self.events()

@@ -1,5 +1,5 @@
 import pygame as pg
-
+from players.ai_table import QLearning
 from players.keyboard import Keyboard
 
 RED = (255, 0, 0)
@@ -21,14 +21,14 @@ WALL_IMG = 'tileGreen_39.png'
 REWARD_LINE_IMG = 'reward_line.png'
 
 # Player settings
-PLAYER_SPEED = 300
+PLAYER_SPEED = 500
 PLAYER_ROT_SPEED = 250
 PLAYER_IMG = 'car.png'
 PLAYER_HIT_RECT = pg.Rect(0, 0, 35, 35)
 
 # AI settings
-# PLAYER = QLearning()
-PLAYER = Keyboard()
+PLAYER = QLearning()
+# PLAYER = Keyboard()
 SHOW_AI_SIGHT = True
 SIGHT_ANGLES = (45, 8, -8, -45)
 REWARD_LINES = [((200, 50), (200, 300)), ((300, 50), (300, 300)), ((500, 50), (500, 300)), ((700, 50), (700, 300)),
