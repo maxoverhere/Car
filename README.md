@@ -7,5 +7,5 @@ To install libaries run ```pip install pygame``` replacing pygame whith what eve
 
 edit the settings file to change the default values like switching ais and stuff
 
-# Progress so far
+# what it looks like
 ![Game Play](https://github.com/maxoverhere/Car-AI/blob/master/Car%20Game.png)
